@@ -68,7 +68,7 @@ if __name__ == "__main__":
         if val == 3:
             temp = 2
         print("a=", a)
-        if a > 20 :
+        if a > 20 and a<100 :
             print("in >")
             lav = 2
         if a ==100 and (temp == 1 or lav == 2 or lav ==7):
