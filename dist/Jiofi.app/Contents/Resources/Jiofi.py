@@ -67,14 +67,17 @@ if __name__ == "__main__":
                 lav=2
         if val == 3:
             temp = 2
-        print("a=",a)
+        print("a=", a)
+        if a > 20 :
+            print("in >")
+            lav = 2
         if a ==100 and (temp == 1 or lav == 2 or lav ==7):
             print(temp)
             print("hello")
             rumps.notification(name.get_text(), charge.get_text()+status, "JioFi is Fully Charged")
             temp = temp + 1
             lav = 5
-        if a < 20 and (lav == 2 or lav == 3 or lav == 5):
+        if a <= 20 and (lav == 2 or lav == 3 or lav == 5) :
             
             print("working",lav)
             rumps.notification(name.get_text(), "Battery Low", "charge:"+charge.get_text())
