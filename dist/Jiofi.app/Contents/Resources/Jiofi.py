@@ -16,7 +16,11 @@ class AwesomeStatusBarApp(rumps.App):
         name = soup.find(id='lWirelessNwValue')
         status = soup.find(id='lDashChargeStatus')
         speed = soup.find(id="lulCurrentDataRate")
-        ass = "Charge :" + charge.get_text() + "\nStatus:" + status.get_text() + "\nSpeed :" + speed.get_text()
+        cpumin = soup.find(id="lcpuMinUsage")
+        cpumax = soup.find(id="lcpuMaxUsage")
+        Productid = soup.find(id="lProductID")
+        hotname = soup.find(id="lPrimaryHostNameValue")
+        ass = "Charge :" + charge.get_text() +"\t\t\tCpu-Min Usage :"+cpumin.get_text()+ "\nStatus:" + status.get_text()+ "\t\tCpu-Max Usage :"+cpumax.get_text()+ "\nSpeed :" + speed.get_text()+"\t\t\tProduct id:"+Productid.get_text()+"\nHOTSPOT NAME :"+ hotname.get_text()
 
         rumps.alert(name.get_text(), ass)
 
