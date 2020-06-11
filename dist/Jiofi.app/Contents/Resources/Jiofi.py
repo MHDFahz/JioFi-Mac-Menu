@@ -63,8 +63,9 @@ if __name__ == "__main__":
                     full = 1
                 elif a <= 20:
                     rumps.notification(name.get_text(), 'Connected & Low Charge', charge.get_text() + " " + status)
-                    inital = 2
+                    initial = 2
                     less = 1
+                    print("less",less)
                 else:
                     rumps.notification(name.get_text(), 'Connected', charge.get_text() + " " + status)
                     initial = 2
@@ -81,24 +82,32 @@ if __name__ == "__main__":
             if a < 100 and a > 20 and (full == 1 or full==2):#chagre<100 and initiall or current
                 print("nott 100")
                 full = 3
-            if a <= 20 and (less ==1 or less ==2):
+            if a <= 20 and (less==0 or less == 2):
                 less = 3
+                print("less", less)
+            if a > 20 and less == 1:
+                less = 3
+                
             if initial == 2 and a == 100 and (full == 0 or full == 3):
                 rumps.notification(name.get_text(), "Fully Charged", charge.get_text() + " " + status)
                 full = 2
-            if initial == 2 and a <= 20 and (less == 0 or less == 3):
+            if initial == 2 and a <= 20 and (less == 0  or less == 3):
+                print(initial,a,less,"1111111")
                 rumps.notification(name.get_text(), "Battery Low", charge.get_text() + " " + status)
-                full = 2
-        except:
+                less = 1
+                print("less",less)
+
+            print("ini", initial,less)
+        except Exception as e:
             if connect == 0:
                 pass
             else:
+                print(e)
                 rumps.notification("JioFi", "Not Connected", "Please Connect to JioFi")
                 initial = 1
                 full = 0
                 less = 0
                 connect = 0
-
         threading.Timer(5, printit,[initial,less,full,Discharge,connect]).start()
     printit(1,0,0,0,1)
     AwesomeStatusBarApp("Jio").run()
