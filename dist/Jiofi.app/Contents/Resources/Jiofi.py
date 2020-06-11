@@ -42,54 +42,56 @@ class AwesomeStatusBarApp(rumps.App):
             rumps.notification('JioFi', "Not Coonected", "You are not connected to JioFi")
 
 if __name__ == "__main__":
-    def printit(val, lav, chr):
+    def printit(initial, less ,full,Discharge = 0):
         try:
-            print("lav",lav,"val",val)
+            print("-->",initial ,less,full)
             URL = 'http://jiofi.local.html/cgi-bin/en-jio/mStatus.html'
             page = requests.get(URL)
             soup = BeautifulSoup(page.content, 'html.parser')
             name = soup.find(id='lWirelessNwValue')
             charge = soup.find(id='lDashBatteryQuantity')
             status = soup.find(id='lDashChargeStatus').get_text()
-            print(status)
             a = int(charge.get_text()[:-1])
-            if status != "Discharging" and chr == 1:
-                rumps.notification(name.get_text(), "Charging", " Your JioFi is " + status + " " + charge.get_text())
-                if a == 100 :
-                    temp = 2
-                    lav = 5        
-                chr = 2
-            if status == "Discharging" and chr == 2:
-                rumps.notification(name.get_text(), "Charging"," Your JioFi is " + status + " " + charge.get_text())
-            if status == "Discharging":
-                chr = 1
-            if val == 1 and a!= 100 and a>= 20:
-                rumps.notification(name.get_text(), "Details", charge.get_text()+status)
-            if lav <=2:
-                if a < 100 or val == 1:
-                    temp = temp + 1
-                    lav = 5
-            if val == 3:
-                temp = 2
-            print("a=", a)
-            if a > 20 and a<100 :
-                print("in >")
-                lav = 2
-            if a ==100 and (temp == 1 or lav == 2 or lav ==7):
-                print(temp)
-                print("hello")
-                rumps.notification(name.get_text(), charge.get_text()+status, "JioFi is Fully Charged")
-                temp = temp + 1
-                lav = 5
-            if a <= 20 and (lav == 2 or lav == 3 or lav == 5) :
-                print("working",lav)
-                rumps.notification(name.get_text(), "Battery Low", "charge:"+charge.get_text())
-                lav = 7
-            threading.Timer(5, printit,[3,lav,chr]).start()
-            print("temp", temp)
-        except Exception:
-            rumps.notification("JioFi", "Not Coonected", "Please Connect to JioFi")
-            threading.Timer(5, printit,[1,1,1]).start()
-
-    printit(1,1,1)
+            print("charge=", a)
+            if initial == 1:
+                if status == "Discharging":
+                    Discharge = 1
+                if a == 100:
+                    rumps.notification(name.get_text(), 'Connected & Full Charge', charge.get_text() + " " + status)
+                    initial = 2
+                    full = 1
+                elif a <= 20:
+                    rumps.notification(name.get_text(), 'Connected & Low Charge', charge.get_text() + " " + status)
+                    inital = 2
+                    less = 1
+                else:
+                    rumps.notification(name.get_text(), 'Connected', charge.get_text() + " " + status)
+                    initial = 2
+            print("discharge = ", Discharge)
+            print(status)
+            if status == "Discharging" and (Discharge == 0 or Discharge == 3):  #Charge -> Discharge
+                print('-->',status)
+                rumps.notification(name.get_text(), 'Discharging', charge.get_text() + " " + status)
+                Discharge = 2
+            if status != "Discharging" and (Discharge == 1 or Discharge == 2):  #Discharge -> Charge
+                print('-->',status)
+                rumps.notification(name.get_text(), 'Charging', charge.get_text() + " " + status)
+                Discharge = 3
+            if a < 100 and a > 20 and (full == 1 or full==2):#chagre<100 and initiall or current
+                print("nott 100")
+                full = 3
+            if a <= 20 and (less ==1 or less ==2):
+                less = 3
+            if initial == 2 and a == 100 and (full == 0 or full == 3):
+                rumps.notification(name.get_text(), "Fully Charged", charge.get_text() + " " + status)
+                full = 2
+            if initial == 2 and a <= 20 and (less == 0 or less == 3):
+                rumps.notification(name.get_text(), "Battery Low", charge.get_text() + " " + status)
+                full = 2
+        except:
+            rumps.notification("JioFi", "Not Connected", "Please Connect to JioFi")
+            
+        
+        threading.Timer(5, printit,[initial,less,full,Discharge]).start()
+    printit(1,0,0)
     AwesomeStatusBarApp("Jio").run()
