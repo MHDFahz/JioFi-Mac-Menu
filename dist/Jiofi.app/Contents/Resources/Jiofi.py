@@ -42,7 +42,7 @@ class AwesomeStatusBarApp(rumps.App):
             rumps.notification('JioFi', "Not Coonected", "You are not connected to JioFi")
 
 if __name__ == "__main__":
-    def printit(initial, less ,full,Discharge = 0):
+    def printit(initial, less ,full,Discharge,connect):
         try:
             print("-->",initial ,less,full)
             URL = 'http://jiofi.local.html/cgi-bin/en-jio/mStatus.html'
@@ -53,6 +53,7 @@ if __name__ == "__main__":
             status = soup.find(id='lDashChargeStatus').get_text()
             a = int(charge.get_text()[:-1])
             print("charge=", a)
+            connect = 1
             if initial == 1:
                 if status == "Discharging":
                     Discharge = 1
@@ -89,9 +90,15 @@ if __name__ == "__main__":
                 rumps.notification(name.get_text(), "Battery Low", charge.get_text() + " " + status)
                 full = 2
         except:
-            rumps.notification("JioFi", "Not Connected", "Please Connect to JioFi")
-            
-        
-        threading.Timer(5, printit,[initial,less,full,Discharge]).start()
-    printit(1,0,0)
+            if connect == 0:
+                pass
+            else:
+                rumps.notification("JioFi", "Not Connected", "Please Connect to JioFi")
+                initial = 1
+                full = 0
+                less = 0
+                connect = 0
+
+        threading.Timer(5, printit,[initial,less,full,Discharge,connect]).start()
+    printit(1,0,0,0,1)
     AwesomeStatusBarApp("Jio").run()
