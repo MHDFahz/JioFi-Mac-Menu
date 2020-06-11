@@ -54,18 +54,21 @@ if __name__ == "__main__":
             print(status)
             a = int(charge.get_text()[:-1])
             if status != "Discharging" and chr == 1:
-                rumps.notification(name.get_text(), "Your JioFi is " + status, "Charge:" + charge.get_text())
+                rumps.notification(name.get_text(), "Charging", " Your JioFi is " + status + " " + charge.get_text())
+                if a == 100 :
+                    temp = 2
+                    lav = 5        
                 chr = 2
             if status == "Discharging" and chr == 2:
-                rumps.notification(name.get_text(), "Your JioFi is " + status, "Charge:" + charge.get_text())
+                rumps.notification(name.get_text(), "Charging"," Your JioFi is " + status + " " + charge.get_text())
             if status == "Discharging":
                 chr = 1
             if val == 1 and a!= 100 and a>= 20:
                 rumps.notification(name.get_text(), "Details", charge.get_text()+status)
             if lav <=2:
                 if a < 100 or val == 1:
-                    temp = 1
-                    lav=2
+                    temp = temp + 1
+                    lav = 5
             if val == 3:
                 temp = 2
             print("a=", a)
