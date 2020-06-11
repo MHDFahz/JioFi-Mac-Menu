@@ -86,6 +86,7 @@ if __name__ == "__main__":
             print("temp", temp)
         except Exception:
             rumps.notification("JioFi", "Not Coonected", "Please Connect to JioFi")
+            threading.Timer(5, printit,[1,1,1]).start()
 
     printit(1,1,1)
     AwesomeStatusBarApp("Jio").run()
