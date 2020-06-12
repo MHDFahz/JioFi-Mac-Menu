@@ -46,7 +46,9 @@ if __name__ == "__main__":
         try:
             print("-->",initial ,less,full)
             URL = 'http://jiofi.local.html/cgi-bin/en-jio/mStatus.html'
+            print('aaa')
             page = requests.get(URL)
+            print("wwww")
             soup = BeautifulSoup(page.content, 'html.parser')
             name = soup.find(id='lWirelessNwValue')
             charge = soup.find(id='lDashBatteryQuantity')
@@ -100,7 +102,10 @@ if __name__ == "__main__":
             print("ini", initial,less)
         except Exception as e:
             if connect == 0:
-                pass
+                initial = 1
+                full = 0
+                less = 0
+                connect = 0
             else:
                 print(e)
                 rumps.notification("JioFi", "Not Connected", "Please Connect to JioFi")
