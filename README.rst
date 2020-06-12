@@ -10,11 +10,6 @@ Use case
 ``JioFi`` is for getting details about your JioFi.
 
 
-Working
-------
--->You Must Connect to a JioFi
--->If You not coonect to a JioFi then it will not work
-
 
 Required
 --------
